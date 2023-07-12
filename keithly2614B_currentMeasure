@@ -1,0 +1,40 @@
+#本代码主要作用为keithly 2600B系列仪器的控制
+#本代码的作用为设定电压等级1V，电流限定10e-5时，对电流的测量
+
+import  pyvisa as visa
+rm=visa.ResourceManager()
+address="GPIB0::26::INSTR"
+
+visa.log_to_screen()
+
+
+print(rm.list_resources())
+
+inst=rm.open_resource(address)
+
+inst.write("reset()")#重置信息
+
+
+inst.write("errorqueue.clear()")#清楚报错缓存
+
+      
+inst.write("smub.source.func = smub.OUTPUT_DCVOLTS")
+
+inst.write("smub.source.autorangev = smub.AUTORANGE_ON")  #自动电压
+
+inst.write("smub.source.levelv = 1")
+
+inst.write("smub.source.limiti = 10e-5")
+
+# inst.write("smub.measure.rangei = 10e-5")
+
+
+inst.write("smub.source.output = smub.OUTPUT_ON")
+
+inst.write("print(smub.measure.i(smub.nvbuffer1))")
+
+
+data=inst.query("smub.measure.i(smub.nvbuffer1)")
+print(data)
+
+inst.write("smub.source.output = smub.OUTPUT_OFF")
