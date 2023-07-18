@@ -1,0 +1,5 @@
+set Volt
+set Channel
+set devices
+you set 1.202V and PXI1Slot2/ao0 channel 
+task creat success

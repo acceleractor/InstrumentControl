@@ -49,13 +49,14 @@
 #include "NIDAQmx.h"
 #include<iostream>
 #include<fstream>
+#include<string>
 
 #define DAQmxErrChk(functionCall) if( DAQmxFailed(error=(functionCall)) ) goto Error; else
 
 
 using namespace std;
-
-
+string s;
+string s1;
 int main(void)
 {
 	int			error=0;
@@ -64,7 +65,7 @@ int main(void)
 	double     data[1] = {1.0};
 	ofstream outlog;
 	outlog.open("outLog.txt");
-
+	
 	/*********************************************/
 	// DAQmx Configure Coden
 	/*********************************************/
@@ -74,10 +75,50 @@ int main(void)
 
 	std::cin>>data[0];	
 	
+	cout<<"set channel"<<endl;
+
+
+	outlog<<"set Channel"<<endl;
+		
+	std::cin>>s;// 0
+	
+
+	cout<<"set devices"<<endl;
+
+
+	outlog<<"set devices"<<endl;
+
+
+	cin>>s1;//PXI1Slot2
+
+
+	string tmp_s;
+
+
+	tmp_s=s1+	"/ao" + s;
+	
+	
+
+// "PXI1Slot2/ao0"
+
+	char* tp_s;
+
+	tp_s=(char *)malloc(sizeof(char)*100);
+
+
+
+	for (int i=0;i<tmp_s.length();i++){
+		tp_s[i]=tmp_s[i];
+	}
+
+	outlog<<"you set"<<data[0];
+	outlog<<"V and "<<tp_s;
+	outlog<<" channel \n";
 	DAQmxErrChk (DAQmxCreateTask("",&taskHandle));
 	printf("task creat success\n");
 	outlog<<"task creat success"<<endl;
-	DAQmxErrChk (DAQmxCreateAOVoltageChan(taskHandle,"PXI1Slot2/ao0","",-10.0,10.0,DAQmx_Val_Volts,""));
+
+	DAQmxErrChk (DAQmxCreateAOVoltageChan(taskHandle,tp_s,"",-10.0,10.0,DAQmx_Val_Volts,""));
 	printf("AOvoltageChan creat success\n");
 	outlog<<"AOvoltageChan creat success"<<endl;
 
@@ -111,9 +152,7 @@ Error:
 	if( DAQmxFailed(error) )
 		printf("DAQmx Error: %s\n",errBuff);
 	printf("End of program, press Enter key to quit\n");
-	cout<<"you has set "<< data[0] <<"";
-	outlog<<"you has set "<< data[0] <<"";
-	
+
 	getchar();
 
 

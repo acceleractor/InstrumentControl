@@ -1,0 +1,5 @@
+set Volt
+set Channel
+set devices
+you set 1V and asd/ao0 channel 
+task creat success
